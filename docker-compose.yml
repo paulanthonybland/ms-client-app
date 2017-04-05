@@ -1,0 +1,41 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo:latest
+    #volumes:
+    #  - /data/db:/var/lib/docker/mongodb
+    #restart: always
+
+  api:
+    image: softinstigate/restheart  
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    ports:
+      - "8080:8080"
+
+  client-data:
+    build: 
+      context: .
+      dockerfile: Dockerfile-client-data
+    depends_on:
+      - mongodb
+      - api
+    links:
+      - mongodb
+      - api
+
+  client-app:
+    build:
+      context: .
+      dockerfile: Dockerfile-client-app
+    ports: 
+      - "3000:3000"
+    depends_on:
+      - mongodb
+      - api
+      - client-data
+    links:
+      - api
+

@@ -1,0 +1,12 @@
+FROM mongo:3.2
+
+WORKDIR /var/tmp/client-db
+COPY prep-db.js /var/tmp/client-db
+COPY prep-db.sh /var/tmp/client-db
+COPY dump-db.js /var/tmp/client-db
+
+RUN chmod +x /var/tmp/client-db/prep-db.sh
+
+CMD ["/var/tmp/client-db/prep-db.sh"]
+
+
